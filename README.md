@@ -14,9 +14,13 @@ To access Luminaire Lane, simply visit [bsusc.online](https://bsusc.online). You
 
 ## Features
 
-### User Login and Logout
+### Seller and Buyer Login and Logout
 
 Luminaire Lane has a user login and logout system that allows users to create an account and log in to access their account information and order history. To log out, simply click on the "Log Out" button.
+
+### Seller Control Panel
+
+Sellers can add products and manage their product listing. The control panel also provides the sellers with access to important data and analytics, such as sales reports, and inventory levels.
 
 ### Shopping Cart
 
