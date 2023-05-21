@@ -1,0 +1,51 @@
+<form id="login-form" method="post" class="p-3">
+    <h3 class="text-center mb-3t">LOGIN</h3>
+    <div class="form-floating mb-3">
+        <input type="text" name="username" class="form-control" id="floatingUsername" placeholder="Enter Username"
+            required>
+        <label for="floatingUsername">Username</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Enter Password"
+            required>
+        <label for="floatingPassword">Password</label>
+    </div>
+    <div class="d-grid gap-2">
+        <input id="" type="submit" value="LOGIN" class="btn btn-dark btn-lg">
+    </div>
+</form>
+
+<script>
+    $(document).ready(() => {
+        $("#login-form").submit((event) => {
+            event.preventDefault();
+
+            const username = $("#floatingUsername").val();
+            const password = $("#floatingPassword").val();
+            const hashed_password = CryptoJS.MD5(password).toString();
+
+            $.ajax({
+                type: "POST",
+                url: "../server/control/user_control.php",
+                data: {
+                    "login-username": username,
+                    "login-password": hashed_password
+                },
+                dataType: "json",
+                success: function (response) {
+                    sessionCheck();
+                    setTimeout(function () {
+                        showNotification(response.message, response.status);
+                        updateProductList();
+                        openProfile();
+                        $("h5#nav-profile-name").empty;
+                        $("h5#nav-profile-name").append((response.username).toUpperCase());
+
+                    }, 1000);
+                }
+            });
+        });
+    });
+
+
+</script>

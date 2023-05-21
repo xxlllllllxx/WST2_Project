@@ -1,0 +1,63 @@
+<form id="signup_seller" class="p-3">
+    <h3 class="text-center mb-3 text-light">SELLER SIGNUP</h3>
+    <div class="form-floating mb-3">
+        <input type="text" name="username" class="form-control" id="floatingUsername" placeholder="Enter Username"
+            required>
+        <label for="floatingUsername">Username</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="password" name="password_1" class="form-control" id="floatingPassword1"
+            placeholder="Enter Password" required>
+        <label for="floatingPassword1">Password</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="password" name="password_2" class="form-control" id="floatingPassword2"
+            placeholder="Enter Password" required>
+        <label for="floatingPassword2">Re-enter Password</label>
+    </div>
+    <div class="form-floating mb-3">
+        <textarea id="profile-address" style="height: 100px; border: 2px solid gold;" name="address"
+            class="form-control" placeholder="Edit Address"></textarea>
+        <label for="profile-address">Enter valid Address</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input id="profile-email" type="email" name="email" class="form-control" placeholder="Edit Email" value="">
+        <label for="profile-email">Enter Email</label>
+    </div>
+    <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" value="">
+    <div class="d-grid gap-2">
+        <input type="submit" value="SIGNUP" class="btn btn-dark btn-lg" onclick="onSubmit(event)">
+    </div>
+</form>
+<script src="https://www.google.com/recaptcha/api.js?render=6LceVuslAAAAAPkLqhASZZo7Wv2aimWqmvXsxBRI"></script>
+<script>
+    function onSubmit(event) {
+        event.preventDefault();
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6LceVuslAAAAAPkLqhASZZo7Wv2aimWqmvXsxBRI', { action: 'submit' }).then(function (token) {
+                document.getElementById('g-recaptcha-response').value = token;
+                var password1 = $('#floatingPassword1').val();
+                var password2 = $('#floatingPassword2').val();
+                if (password1 === password2) {
+                    var encryptedPassword = CryptoJS.MD5(password1).toString();
+                    $('#signup_seller').append('<input type="hidden" name="password" value="' + encryptedPassword + '">');
+                    $.ajax({
+                        type: "POST",
+                        url: "../server/control/user_signup.php",
+                        data: $('#signup_seller').serialize(),
+                        success: function (response) {
+                            var responseData = JSON.parse(response);
+                            $("#panel").empty();
+                            showNotification(responseData.message, responseData.type);
+                        },
+                        error: function () {
+                            showNotification("Use a different Username", "error");
+                        }
+                    });
+                } else {
+                    showNotification("Passwords do not match", "error");
+                }
+            });
+        });
+    }
+</script>

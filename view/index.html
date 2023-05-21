@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Website: Dashboard</title>
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=Aa4L0Ghm8p41A0JQ6rGTUTJxBzwkxCo4KMDqTRXX9sU3k3EWY0O5_N7_nJQzxA_MFCME7arOJI4-4-4V"></script>
+
+    <script src="../sources/crypto-js.js_4.0.0/cdnjs/crypto-js.js"></script>
+    <script src="../sources/jquery-3.6.4.js"></script>
+
+    <link rel="stylesheet" href="../sources/bootstrap-5.0.2-dist/css/bootstrap.min.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Playfair+Display&display=swap');
+
+        #shop-name {
+            font-family: 'Playfair Display', serif;
+        }
+
+        @font-face {
+            font-family: 'DS-DIGI';
+            src: url('../sources/font/DS-DIGIB.TTF') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        .digi-num {
+            font-family: 'ds-digi', monospace;
+            font-size: large;
+        }
+
+        body {
+            background-color: black;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .bg-light,
+        .text-light,
+        .navbar-light .navbar-nav .nav-link,
+        .navbar-light .navbar-toggler {
+            color: gold !important;
+        }
+
+        .btn-outline-light {
+            color: gold !important;
+            border-color: gold !important;
+            font-weight: 500;
+        }
+
+        .btn-outline-light:hover {
+            background-color: rgba(255, 215, 0, 0.3) !important;
+            color: white !important;
+
+        }
+
+        .btn-check:active+.btn-outline-light,
+        .btn-check:checked+.btn-outline-light,
+        .btn-outline-light.active,
+        .btn-outline-light.dropdown-toggle.show,
+        .btn-outline-light:active {
+            background-color: rgba(255, 215, 0, 0.3) !important;
+            border-color: gold;
+        }
+
+        .product {
+            position: relative;
+        }
+
+        .mask {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.0);
+        }
+
+        .carousel {
+            width: 100%;
+            aspect-ratio: 1/1 !important;
+            border: 1px solid gold;
+            padding: 2px;
+        }
+
+        .carousel-item img {
+            object-fit: cover;
+            aspect-ratio: 1/1;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: auto;
+            margin-bottom: auto;
+            max-height: 380px;
+            max-width: 380px;
+        }
+
+        .carousel-control-prev-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' stroke='black' fill='%23FFD700' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+        }
+
+        .carousel-control-next-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' stroke='black' fill='%23FFD700' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
+        }
+
+        .carousel-indicators button {
+            background-color: gold;
+            border-color: gold;
+        }
+
+        .carousel-indicators .active {
+            background-color: gold;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: black;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: gold;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: white;
+        }
+
+        form input[type="text"],
+        form input[type="password"],
+        form input[type="number"],
+        form input[type="email"],
+        textarea {
+            border: 2px solid gold;
+            background-color: transparent;
+            color: white !important;
+        }
+
+        form input[type="text"]:focus,
+        form input[type="password"]:focus,
+        form input[type="number"]:focus,
+        form input[type="submit"]:focus,
+        form input[type="email"]:focus,
+        textarea:focus {
+            border: 2px solid white;
+            background-color: transparent !important;
+        }
+
+        form input[type="text"]:not(:focus),
+        form input[type="password"]:not(:focus),
+        form input[type="number"]:not(:focus),
+        form input[type="email"]:not(:focus),
+        textarea:not(:focus) {
+            border: 2px solid gold;
+            background-color: transparent !important;
+        }
+
+        form input[type="submit"] {
+            background-color: gold;
+            border: 2px solid white;
+            font-weight: 700 !important;
+            width: 100%;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: rgba(255, 215, 0, 0.3);
+            border: 2px solid gold;
+            color: gold;
+            width: 100%;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+    </style>
+</head>
+
+<body>
+    <script data-sdk-integration-source="integrationbuilder_ac"></script>
+    <!-- NAV BAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark align-items-end w-100">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="../sources/images/LOGO.png" alt="Shopping Logo" width="50" height="50" class="me-2">
+                <h2 id="shop-name" class="m-0 text-light ">LUMINAIRE LANE</h2>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto d-flex align-items-center">
+                    <li class="nav-item" id="nav-login">
+                        <a class="nav-link text-light" href="#">
+                            <button id="login" class="btn btn-outline-light w-100">LOGIN</button>
+                        </a>
+                    </li>
+                    <li id="nav-profile"
+                        class="nav-item btn btn-outline-light hidden px-2 py-0 d-flex align-items-center me-3 "
+                        style="height: 40px;">
+                        <h5 id="nav-profile-name" class="text-light d-inline my-0 me-3">TEMP USER</h5>
+                        <img id="nav-profile-pic" src="../sources/images/person_icon.png" alt="No Image" width="32px"
+                            height="32px" style="border: 1px solid gold; border-radius: 50%;">
+                    </li>
+                    <li class="nav-item dropdown">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="menu-icon-dropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <ul class="dropdown-menu bg-dark dropdown-menu-end" aria-labelledby="menu-icon-dropdown">
+                            <li id="nav-sign-cust">
+                                <a class="dropdown-item" href="#">
+                                    <button id="signup-customer" class="btn btn-outline-light w-100 text-start">SIGNUP
+                                        AS CUSTOMER</button>
+                                </a>
+                            </li>
+                            <li id="nav-sign-sell">
+                                <a class="dropdown-item" href="#">
+                                    <button id="signup-seller" class="btn btn-outline-light w-100 text-start">SIGNUP AS
+                                        SELLER</button>
+                                </a>
+                            </li>
+                            <li id="nav-logout" class="dropdown-item hidden">
+                                <button class="btn btn-outline-light w-100 text-start">LOGOUT</button>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <button id="about" class="btn btn-outline-light w-100 text-start">ABOUT</button>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- NOTIFICATION -->
+    <div id="toast-container"></div>
+
+    <div class="row w-100 m-0 mt-3"
+        style="height: calc(100vh - 85px); max-height: calc(100vh - 85px); overflow-y: hidden;">
+        <!-- DIV item_panel: LIST OF AVAILABLE ITEMS -->
+        <div class="panel col-lg-8 panel-default bg-dark text-light h-auto m-0"
+            style="height: calc(100vh - 85px); max-height: calc(100vh - 85px); overflow-y: scroll !important;">
+            <div class="panel-heading">
+                <h3 class="panel-title"></h3>
+            </div>
+            <div id="product_panel" class="panel-body">
+
+            </div>
+
+        </div>
+
+        <!-- DIV user_panel: LOGIN/SIGNUP SWAPPBLE FORM -->
+        <div class="panel col-lg-4 panel-default bg-dark text-light h-auto m-0"
+            style="height: calc(100vh - 85px); max-height: calc(100vh - 85px); overflow-y: scroll !important;">
+            <div id="shopping-cart-panel"
+                class="panel-heading p-2 d-flex justify-content-end align-items-center m-2 bg-dark hidden w-auto"
+                style="border: 1px solid gold; z-index: 1;">
+                <h3 class="text-light me-2 mb-0 text-center">SHOPPING CART</h3>
+                <button id="shopping-cart" class="btn btn-outline-light">
+                    <svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24" width="24"
+                        height="24">
+                        <circle cx="8.5" cy="20.5" r="1.5" fill="#ffffff" class="color6563ff svgShape"></circle>
+                        <circle cx="16.5" cy="20.5" r="1.5" fill="#ffffff" class="color6563ff svgShape"></circle>
+                        <path fill="#ffd700"
+                            d="M19 18H7a3 3 0 0 1-.32-5.983L4.882 5.725A1.005 1.005 0 0 0 3.92 5H3a1 1 0 0 1 0-2h.921a3.012 3.012 0 0 1 2.885 2.176l2.155 7.55A1 1 0 0 1 8 14H7a1 1 0 0 0 0 2h12a1 1 0 0 1 0 2Z"
+                            class="colorb2b1ff svgShape"></path>
+                        <path fill="#ffffff"
+                            d="m6.806 5.176 2.155 7.55A1 1 0 0 1 8 14h7.491a3.013 3.013 0 0 0 2.885-2.176l1.585-5.55A1 1 0 0 0 19 5H6.74c.02.06.048.115.066.176Z"
+                            class="color6563ff svgShape"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="panel" class="panel-body mt-3">
+
+            </div>
+        </div>
+    </div>
+
+    <!-- END OF DASHBOARD -->
+    <script>
+        product_id = null;
+        user_id = null;
+        isSeller = false;
+
+        function showNotification(message, type) {
+            var toastContainer = $("#toast-container");
+
+            var toast = $("<div>").addClass("toast").attr("role", "alert").attr("aria-live", "assertive").attr("aria-atomic", "true").css("border", "2px solid white").css("border-radius", "5px");
+
+            switch (type) {
+                case "success":
+                    toast.addClass("bg-success");
+                    break;
+                case "error":
+                    toast.addClass("bg-danger");
+                    break;
+                case "warning":
+                    toast.addClass("bg-warning");
+                    break;
+                default:
+                    toast.addClass("bg-info");
+            }
+
+            var toastHeader = $("<div>").addClass("toast-header").css("background-color", "gold").text("Notification");
+            var closeButton = $("<button>").addClass("btn-close  ms-auto me-1").attr("type", "button").attr("data-bs-dismiss", "toast").attr("aria-label", "Close");
+            toastHeader.append(closeButton);
+            var toastBody = $("<div>").addClass("toast-body").text(message).css("font-weight", "500").css("font-size", "14px");
+            toast.append(toastHeader).append(toastBody);
+            toastContainer.append(toast);
+            toast.toast("show");
+        }
+
+        function sessionCheck() {
+            $.ajax({
+                type: "post",
+                url: '../server/include/session.php',
+                data: { "checksession": "1" },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.length == 0) {
+                        $("li#nav-login").removeClass("hidden");
+                        $("li#nav-sign-sell").removeClass("hidden");
+                        $("li#nav-sign-cust").removeClass("hidden");
+                        $("li#nav-profile").addClass("hidden");
+                        $("li#nav-logout").addClass("hidden");
+                        user_id = null;
+                        isSeller = false;
+                    } else {
+                        $("li#nav-login").addClass("hidden");
+                        $("li#nav-sign-sell").addClass("hidden");
+                        $("li#nav-sign-cust").addClass("hidden");
+                        $("li#nav-profile").removeClass("hidden");
+                        $("li#nav-logout").removeClass("hidden");
+                        user_id = data.user.user_id;
+                        isSeller = data.user.isSeller;
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + error);
+                }
+            });
+        }
+
+        function openProfile() {
+            if (user_id != null) {
+                product_id = null;
+                $("#shopping-cart-panel").addClass("hidden");
+                $.ajax({
+                    type: "post",
+                    url: "../server/control/profile.php",
+                    dataType: "html",
+                    success: function (response) {
+                        $("#panel").empty();
+                        $("#panel").append(response);
+                    }
+                });
+            }
+        }
+
+        function loadProfileImage(profile_id) {
+            $.ajax({
+                type: "POST",
+                url: "../server/control/image_loader.php",
+                data: { image_id: profile_id },
+                responseType: 'json',
+                success: function (response) {
+                    var image_id = response.id;
+                    if (response.imageBase64.length > 1) {
+                        var imageBase64 = response.imageBase64;
+                        var imageUrl = 'data:image/png;base64,' + imageBase64;
+                        $('img#profile_image_' + image_id).attr('src', imageUrl);
+                        $("img#nav-profile-pic").attr('src', imageUrl);
+                    }
+                }
+            });
+        }
+
+        function updateProductList() {
+            if (user_id == null || !isSeller) {
+                $.ajax({
+                    type: "post",
+                    url: "../server/control/item_control.php",
+                    dataType: "json",
+                    success: function (response) {
+                        tmpItem = '<div class="row">';
+                        counter = 1;
+                        for (const key in response) {
+                            i = response[key];
+                            tmpItem += `
+                                <div class="product col-sm-3">
+                                    <div class="item_${i.product_id} mb-3 p-2" style="border: 1px solid gold; border-radius: 5px;">
+                                        <img id="image_${i.product_icon_id}" src="../sources/images/broken_img.png" alt="" width="100%" style="aspect-ratio: 1/1;">
+                                        <h4 class="text-light">${i.product_name.toUpperCase()}</h4>
+                                        <h4 class="text-light"><b>${"P" + Number(i.product_price).toFixed(2)}</b></h4>
+                                        <h5 class="text-light">Seller: ${i.username}</h5>
+                                        <h6 class="text-light">${i.total_stock}</h6>
+                                    </div>
+                                    <div class="mask" id="product_${i.product_id}"></div>
+                                </div>
+                            `;
+                            if (counter % 4 == 0) {
+                                tmpItem += '</div><div class="row">';
+                            }
+                            $.ajax({
+                                type: "POST",
+                                url: "../server/control/image_loader.php",
+                                data: { image_id: i.product_icon_id },
+                                responseType: 'json',
+                                success: function (response) {
+                                    var image_id = response.id;
+                                    var imageBase64 = response.imageBase64;
+                                    var imageUrl = 'data:image/png;base64,' + imageBase64;
+                                    $('img#image_' + image_id).attr('src', imageUrl);
+                                }
+                            });
+                            counter++;
+                        }
+                        tmpItem += '</div>';
+                        $("div#product_panel").empty();
+                        $("div#product_panel").append(tmpItem);
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: "post",
+                    url: "../server/control/item_control.php",
+                    data: { "seller_id": user_id },
+                    dataType: "json",
+                    success: function (response) {
+                        tmpItem = '<div class="row">';
+                        tmpItem += `
+                                <div class="product col-sm-3">
+                                    <div class="mb-3 p-2" style="border: 1px solid gold; border-radius: 5px;">
+                                        <img src="../sources/images/product_add_new.png" alt="" width="100%" style="aspect-ratio: 1/1;">
+                                        <h4 class="text-light">NEW PRODUCT</h4>
+                                        <h4 class="text-light hidden"><b>XXX</b></h4>
+                                        <h6 class="text-light hidden">XXX</h6>
+                                    </div>
+                                    <div class="mask seller new-product" id="product_add_new"></div>
+                                </div>
+                            `;
+                        counter = 2;
+                        for (const key in response) {
+                            i = response[key];
+                            tmpItem += `
+                                <div class="product col-sm-3">
+                                    <div class="item_${i.product_id} mb-3 p-2" style="border: 1px solid gold; border-radius: 5px;">
+                                        <img id="image_${i.product_icon_id}" src="../sources/images/broken_img.png" alt="" width="100%" style="aspect-ratio: 1/1;">
+                                        <h4 class="text-light">${i.product_name.toUpperCase()}</h4>
+                                        <h4 class="text-light"><b>${"P" + Number(i.product_price).toFixed(2)}</b></h4>
+                                        <h6 class="text-light">${i.total_stock}</h6>
+                                    </div>
+                                    <div class="mask seller" id="seller-product_${i.product_id}"></div>
+                                </div>
+                            `;
+                            if (counter % 4 == 0) {
+                                tmpItem += '</div><div class="row">';
+                            }
+                            $.ajax({
+                                type: "POST",
+                                url: "../server/control/image_loader.php",
+                                data: { image_id: i.product_icon_id },
+                                responseType: 'json',
+                                success: function (response) {
+                                    var image_id = response.id;
+                                    var imageBase64 = response.imageBase64;
+                                    var imageUrl = 'data:image/png;base64,' + imageBase64;
+                                    $('img#image_' + image_id).attr('src', imageUrl);
+                                }
+                            });
+                            counter++;
+                        }
+                        tmpItem += '</div>';
+                        $("div#product_panel").empty();
+                        $("div#product_panel").append(tmpItem);
+                    }
+                });
+            }
+        }
+
+        $(document).ready(() => {
+            sessionCheck();
+            //LOAD dashboard with products
+            setTimeout(function () {
+                updateProductList();
+                openProfile();
+            }, 1000);
+
+            setInterval(updateProductList, 10000);
+
+            //FOR product
+            $("div#product_panel").on("click", (e) => {
+                if ($(e.target).hasClass("mask") && !$(e.target).hasClass("seller")) {
+                    product_id = $(e.target).attr("id").replace("product_", "");
+                    if (!isSeller) {
+                        $("#shopping-cart-panel").removeClass("hidden");
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: "../server/control/item_info.php",
+                        data: { id: product_id },
+                        success: function (response) {
+                            $("#panel").empty();
+                            $("#panel").append(response);
+                        }
+                    });
+                } else if ($(e.target).hasClass("mask seller") && !$(e.target).hasClass("new-product")) {
+                    product_id = $(e.target).attr("id").replace("seller-product_", "");
+                    if (!isSeller) {
+                        $("#shopping-cart-panel").removeClass("hidden");
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: "../server/control/item_info.php",
+                        data: { id: product_id },
+                        success: function (response) {
+                            $("#panel").empty();
+                            $("#panel").append(response);
+                        }
+                    });
+                } else if ($(e.target).hasClass("new-product")) {
+                    $.ajax({
+                        type: "POST",
+                        url: "../server/control/seller_control.php",
+                        success: function (response) {
+                            $("#panel").empty();
+                            $("#panel").append(response);
+                        }
+                    });
+                }
+            });
+
+            $("#shopping-cart").on("click", () => {
+                $.ajax({
+                    type: "POST",
+                    url: "../server/control/shopping_cart.php",
+                    success: function (response) {
+                        $.ajax({
+                            type: "POST",
+                            url: "../server/control/shopping_cart.php",
+                            data: { "data": response },
+                            dataType: "json",
+                            success: function (response) {
+                                const tableHeaders = `
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Product</th>
+                                            <th>Price</th>
+                                            <th>*</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                `;
+                                let tableRows = '';
+                                let totalAmount = 0;
+
+                                for (const key in response) {
+                                    const item = response[key];
+                                    const subtotal = item.product_price * item.product_quantity;
+                                    const row = `
+                                        <tr>
+                                            <td><input type="checkbox" class="add-sub-total"><input type="hidden" name="transaction_id" value="${item.transaction_id}"></td>
+                                            <td>${item.product_name}</td>
+                                            <td>${item.product_price}</td>
+                                            <td>${item.product_quantity}</td>
+                                            <td class="digi-num" data-subtotal="${subtotal}">P${subtotal.toFixed(2)}</td>
+                                        </tr>
+                                    `;
+
+                                    tableRows += row;
+                                }
+
+                                const table = `<form>
+                                    <table class="table text-light bg-dark table-bordered w-100" style="border-color: gold;">
+                                        ${tableHeaders}
+                                        <tbody>
+                                            ${tableRows}
+                                            <tr>
+                                                <td colspan="4">TOTAL AMOUNT: </td>
+                                                <td colspan="1" class="digi-num"><span id="totalAmount">0.00</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                `;
+                                $("#panel").empty();
+                                $('#panel').append(table);
+                                $("#panel").append('<div class="d-grid gap-2"><input id="check-out" type="submit" value="CHECK OUT" class="btn btn-dark btn-lg text-light btn-outline-light"></div></form>');
+                                $("#panel").append('<div id="paypal-button-container" class="mt-5 bg-light p-2 hidden" style="color:gold !important;"></div>');
+
+                                $(".add-sub-total").on("change", function () {
+                                    const subtotal = parseFloat($(this).parent().parent().find("td[data-subtotal]").data("subtotal"));
+                                    if ($(this).is(":checked")) {
+                                        totalAmount += subtotal;
+                                    } else {
+                                        totalAmount -= subtotal;
+                                    }
+                                    $("#totalAmount").text("P" + totalAmount.toFixed(2));
+                                });
+
+                                $("input#check-out").on("click", function () {
+                                    const checkedCheckboxes = $('.add-sub-total:checked');
+                                    $("#paypal-button-container").removeClass("hidden");
+                                    const transactionIds = checkedCheckboxes.map(function () {
+                                        return $(this).siblings('input[name="transaction_id"]').val();
+                                    }).get();
+
+                                    if (transactionIds.length > 0) {
+                                        const FUNDING_SOURCES = [
+                                            paypal.FUNDING.PAYPAL,
+                                            paypal.FUNDING.PAYLATER,
+                                            paypal.FUNDING.VENMO,
+                                            paypal.FUNDING.CARD
+                                        ];
+
+                                        const totalamount = parseFloat($("#totalAmount").text().substring(1));
+
+                                        FUNDING_SOURCES.forEach(fundingSource => {
+                                            paypal.Buttons({
+                                                fundingSource,
+                                                style: {
+                                                    layout: 'vertical',
+                                                    shape: 'rect',
+                                                    color: (fundingSource == paypal.FUNDING.PAYLATER) ? 'gold' : '',
+                                                },
+                                                createOrder: function (data, actions) {
+                                                    showNotification("Payment using Paypal", "info");
+                                                    return actions.order.create({
+                                                        purchase_units: [{
+                                                            amount: {
+                                                                value: totalamount.toFixed(2),
+                                                                currency: 'PHP'
+                                                            }
+                                                        }]
+                                                    });
+                                                },
+                                                onApprove: async (data, actions) => {
+                                                    $.ajax({
+                                                        type: "POST",
+                                                        url: "../server/control/shopping_cart.php",
+                                                        data: { "transaction_ids": transactionIds },
+                                                        dataType: "json",
+                                                        success: function (response) {
+                                                            showNotification(response.message, response.status);
+                                                            $("#shopping_cart").click();
+                                                        }
+                                                    });
+                                                }
+                                            }).render("#paypal-button-container");
+                                        });
+
+                                    } else {
+                                        showNotification("Checkout Empty", "warning");
+                                        $("#paypal-button-container").addClass("hidden");
+                                    }
+                                });
+                            },
+                            error: function () {
+                                showNotification("Shopping cart Empty", "error");
+                            }
+                        });
+                    }
+                });
+            });
+
+            //FOR user
+            $("button#login").on("click", () => {
+                product_id = null;
+                $("#shopping-cart-panel").addClass("hidden");
+                $.ajax({
+                    type: "POST",
+                    url: "form/login.html",
+                    dataType: "html",
+                    success: function (response) {
+                        $("#panel").empty();
+                        $("#panel").append(response);
+                    }
+                });
+            });
+            $("button#signup-customer").on("click", () => {
+                product_id = null;
+                $("#shopping-cart-panel").addClass("hidden");
+                $.ajax({
+                    type: "POST",
+                    url: "form/signup_customer.html",
+                    dataType: "html",
+                    success: function (response) {
+                        $("#panel").empty();
+                        $("#panel").append(response);
+                    }
+                });
+            });
+            $("button#signup-seller").on("click", () => {
+                product_id = null;
+                $("#shopping-cart-panel").addClass("hidden");
+                $.ajax({
+                    type: "POST",
+                    url: "form/signup_seller.html",
+                    dataType: "html",
+                    success: function (response) {
+                        $("#panel").empty();
+                        $("#panel").append(response);
+                    }
+                });
+            });
+            $("li#nav-profile").on("click", () => { openProfile(); updateProductList() });
+
+            $("li#nav-logout").on("click", () => {
+                $.ajax({
+                    type: "post",
+                    url: "../server/control/user_control.php",
+                    data: { "logout": "1" },
+                    dataType: "text",
+                    success: function (response) {
+                        sessionCheck();
+                        setTimeout(function () {
+                            showNotification("User Logged out", "info");
+                            updateProductList();
+                            openProfile();
+                            $("#panel").empty();
+                        }, 1000);
+                    }
+                });
+            });
+
+            $("button#about").on("click", () => {
+                product_id = null;
+                $("#shopping-cart-panel").addClass("hidden");
+                $.ajax({
+                    type: "POST",
+                    url: "form/about.html",
+                    dataType: "html",
+                    success: function (response) {
+                        $("#panel").empty();
+                        $("#panel").append(response);
+                    }
+                });
+            });
+
+            $("button").on("hover", () => { })
+
+            //SESSION
+            setInterval(sessionCheck, 5000);
+        });
+    </script>
+    <script src="../sources/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>
