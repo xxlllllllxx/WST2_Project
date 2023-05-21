@@ -2,9 +2,7 @@
 
 ## Contributors
 
-- John Doe (@johndoe)
-- Jane Smith (@janesmith)
-- Bob Johnson (@bobjohnson)
+- Masallo, Lewis Daverriel (@xxlllllllxx)
 
 # Luminaire Lane
 
