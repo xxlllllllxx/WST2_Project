@@ -33,7 +33,7 @@ Luminaire Lane uses PayPal as the payment method for all orders. To complete you
 ## Hosting
 
 Luminaire Lane is hosted on [000webhost](https://www.000webhost.com/). 
-Luminaire Lane Domain name [Luminaire Lane](https://www/bsusc.com/).
+Luminaire Lane Domain name [Luminaire Lane](https://bsusc.online/).
 
 ## Contributing
 
